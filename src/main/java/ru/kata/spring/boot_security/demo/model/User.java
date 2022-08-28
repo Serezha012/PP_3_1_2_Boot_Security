@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import javax.persistence.*;
+import java.util.*;
+
 
 @Entity
 @Table(name = "users")
@@ -13,6 +15,14 @@ public class User {
     private int id;
 
 
+    @Column(name = "username")
+    private String username;
+
+
+    @Column(name = "password")
+    private String password;
+
+
     @Column(name = "name")
     private String name;
 
@@ -23,7 +33,29 @@ public class User {
     @Column(name = "age")
     private int age;
 
+
+    @ManyToMany(fetch = FetchType.EAGER)
+
+    private List<Role> roles;
+
     public User() {
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+
+    public String getRolesString() {
+        StringJoiner joiner = new StringJoiner(",");
+        for (Role role : roles) {
+            joiner.add(role.toString().substring(5));
+        }
+        return joiner.toString();
+    }
+
+    public void setRoles(Role role) {
+        this.roles = Collections.singletonList(role);
     }
 
     public User(String Name, String surname, int old) {
@@ -63,4 +95,21 @@ public class User {
     public void setAge(int old) {
         this.age = old;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
