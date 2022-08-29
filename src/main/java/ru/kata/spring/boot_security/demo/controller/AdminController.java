@@ -1,12 +1,10 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -24,13 +22,10 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String getUserList(Model model) {
+    public String getUserList(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("getUserList", userService.getUserList());
         model.addAttribute("newUser", new User());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        int id = userDetails.getUser().getId();
-        model.addAttribute("getUserById", userService.getUserById(id));
+        model.addAttribute("getUserById", userService.getUserById(user.getId()));
         model.addAttribute("rolesList", roleService.findAll());
 
         return "admin/users";
