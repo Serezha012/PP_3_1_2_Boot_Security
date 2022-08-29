@@ -37,7 +37,11 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
 
     @ManyToMany(fetch = FetchType.EAGER)
-
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
     private List<Role> roles;
 
     public User() {
@@ -145,7 +149,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return username.equals(user.username) ;
+        return username.equals(user.username);
     }
 
     @Override
@@ -154,7 +158,6 @@ public class User implements org.springframework.security.core.userdetails.UserD
         result = 31 * result + (username != null ? username.hashCode() : 0);
         return result;
     }
-
 
 
 }
