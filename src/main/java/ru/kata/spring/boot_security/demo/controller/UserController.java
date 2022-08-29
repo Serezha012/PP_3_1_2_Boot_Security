@@ -22,11 +22,7 @@ public class UserController {
 
     @GetMapping()
     public String user(@AuthenticationPrincipal User user, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("getUserById", userService.getUserById(user.getId()));
-
-
-
         return "user";
     }
 }
