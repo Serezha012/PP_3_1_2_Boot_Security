@@ -42,12 +42,12 @@ public class User implements org.springframework.security.core.userdetails.UserD
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private List<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
@@ -61,7 +61,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
     }
 
     public void setRoles(Role role) {
-        this.roles = Collections.singletonList(role);
+        this.roles.add(role);
     }
 
     public User(String Name, String surname, int old) {

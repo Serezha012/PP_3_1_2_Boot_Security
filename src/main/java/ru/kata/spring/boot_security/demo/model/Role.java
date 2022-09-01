@@ -5,8 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -17,7 +19,7 @@ public class Role implements GrantedAuthority {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
