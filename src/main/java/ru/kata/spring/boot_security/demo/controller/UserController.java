@@ -25,4 +25,10 @@ public class UserController {
         model.addAttribute("getUserById", userService.getUserById(user.getId()));
         return "user";
     }
+
+
+    @GetMapping("/zalupa")
+    public String zalupa(){
+        return "zalupa";
+    }
 }
