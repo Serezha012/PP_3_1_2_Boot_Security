@@ -32,6 +32,19 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     private String surname;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", roles=" + roles +
+                '}';
+    }
+
     @Column(name = "age")
     private int age;
 

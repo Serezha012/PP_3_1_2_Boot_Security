@@ -6,7 +6,7 @@ const userInfo = fetch('api/getUser')
 
 
 userInfo.then(user => {
-    tmp += `${user.username} with rolesss ${user.roles.map(x => x.name.slice(5))}`
+    tmp += `${user.username} with roles ${user.roles.map(x => x.name.slice(5))}`
     navbarName.innerHTML = tmp
 })
 

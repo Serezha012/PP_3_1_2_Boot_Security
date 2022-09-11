@@ -3,8 +3,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>All Cars</title>
+    <title>All Users</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
 
 </head>
 <body style="background: rgb(231, 231, 231);">
@@ -12,8 +16,7 @@
 
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <span class="navbar-brand h1"
-              th:text="${getUserById.getUsername()} + ' with roles ' + ${getUserById.getRolesString()} "></span>
+        <span class="navbar-brand h1" id="navbar-name"></span>
         <span class="navbar-brand h1"> <a class="link-secondary" href="/logout">Выйти</a></span>
     </div>
 </nav>
@@ -65,31 +68,17 @@
                                     <th scope="col">Удалить</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr th:each="user : ${getUserList}">
-                                    <td th:text="${user.getId()}"></td>
-                                    <td>
-                                        <a th:text="${user.getName()}"> </a>
-                                    </td>
-                                    <td th:text="${user.getSurname()}"></td>
-                                    <td th:text="${user.getAge()}"></td>
-                                    <td th:text="${user.getUsername()}"></td>
-                                    <td th:text="${user.getPassword()}"></td>
-                                    <td th:text="${user.getRolesString()}"></td>
-                                    <td>
-
-                                        <button  type="submit" class="btn btn-info" data-bs-toggle="modal"   th:href="'#exampleModal'+ ${user.getId()}"      >EDIT
-                                        </button>
-
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
-
-                                            <button type="submit" class="btn btn-danger">DELETE</button>
-
-                                        </form>
-                                    </td>
+                                <tbody id="main-body">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
 
                                 </tr>
                                 </tbody>
@@ -103,12 +92,13 @@
                             </div>
                             <div align="center" class="border border-2"
                                  style="background: white; margin: 0 ;padding: 10">
-                                <form th:method="POST" th:action="@{/admin}" th:object="${newUser}">
+                                <form id = "addNewUser">
+
                                     <div class="form-row align-items-center">
                                         <div class="col-sm-3 my-1">
                                             <label class="sr-only" for="inlineFormInput"><strong>Имя</strong></label>
-                                            <input th:field="*{name}" type="text" class="form-control mb-2"
-                                                   id="inlineFormInput"
+                                            <input type="text" class="form-control mb-2"
+                                                   id ="name-value"
                                                    placeholder="Иван"/>
 
                                         </div>
@@ -116,42 +106,40 @@
                                             <label class="sr-only"
                                                    for="inlineFormInputGroup"><strong>Фамилия</strong></label>
                                             <div class="input-group mb-2">
-                                                <input th:field="*{surname}" type="text" class="form-control"
-                                                       id="inlineFormInputGroup" placeholder="Иванов"/>
+                                                <input  type="text" class="form-control"
+                                                        id ="surname-value" placeholder="Иванов"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-3 my-1">
                                             <label class="sr-only"
                                                    for="inlineFormInputGroup"><strong>Возраст</strong></label>
                                             <div class="input-group mb-2">
-                                                <input th:field="*{age}" type="number" class="form-control"
-                                                       id="inlineFormInputGroup" placeholder="0"/>
+                                                <input type="number" class="form-control"
+                                                       id ="age-value" placeholder="0"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-3 my-1">
                                             <label class="sr-only"
                                                    for="inlineFormInputGroup"><strong>Почта</strong></label>
                                             <div class="input-group mb-2">
-                                                <input th:field="*{username}" type="email" class="form-control"
-                                                       id="inlineFormInputGroup" placeholder="username"/>
+                                                <input type="text" class="form-control"
+                                                       id="username-value" placeholder="username"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-3 my-1">
                                             <label class="sr-only"
                                                    for="inlineFormInputGroup"><strong>Пароль</strong></label>
                                             <div class="input-group mb-2">
-                                                <input th:field="*{password}" type="password" class="form-control"
-                                                       id="inlineFormInputGroup" placeholder="password"/>
+                                                <input  type="password" class="form-control"
+                                                        id="password-value" placeholder="password"/>
                                             </div>
                                         </div>
 
                                         <div class="col-sm-3 my-1">
                                             <p style="margin-top: 5px"><strong>Роль</strong></p>
-                                            <select class="form-select" name="roles" >
-                                                <option th:each="role : ${rolesList}"
-                                                        th:value="${role.getId()}"
-                                                        th:text="${role.getName()}">Wireframe
-                                                </option>
+                                            <select class="form-select" name="roles" id="roles-value" >
+                                                <option value="2">USER</option>
+                                                <option value="1">ADMIN</option>
                                             </select>
 
                                         </div>
@@ -186,15 +174,15 @@
 
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="table-info">
                             <tr>
-                                <td th:text="${getUserById.getId()}"></td>
-                                <td th:text="${getUserById.getName()}"></td>
-                                <td th:text="${getUserById.getSurname()}"></td>
-                                <td th:text="${getUserById.getAge()}"></td>
-                                <td th:text="${getUserById.getUsername()}"></td>
-                                <td th:text="${getUserById.getPassword()}"></td>
-                                <td th:text="${getUserById.getRolesString()}"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>
@@ -208,7 +196,7 @@
 
 </div>
 
-<div th:each="user8: ${getUserList}" class="modal fade" th:attr="id=${'exampleModal' + user8.getId()}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="windowModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -216,47 +204,44 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" align="center">
-                <form id = "myForm" action= "#" th:method="PATCH" th:action="@{/admin/{id}(id=${user8.getId()})}"
-                      th:object="${user8}">
+                <form id = "myForm" action= "#" >
                     <div class="form-row align-items-center">
                         <div class="col-sm-7 my-1">
-                            <label class="sr-only" for="inlineFormInput">Имя</label>
-                            <input th:value="*{name}" name="name"  type="text" class="form-control mb-2" id="inlineFormInput">
+                            <label class="sr-only" for="modalName">Имя</label>
+                            <input  name="name"  type="text" class="form-control mb-2" id="modalName">
                         </div>
                         <div class="col-sm-7 my-1">
-                            <label class="sr-only" for="inlineFormInputGroup">Фамилия</label>
+                            <label class="sr-only" for="modalSurname">Фамилия</label>
                             <div class="input-group mb-2">
-                                <input th:value="*{surname}" name="surname" type="text" class="form-control" id="inlineFormInputGroup">
+                                <input  name="surname" type="text" class="form-control" id="modalSurname">
                             </div>
                         </div>
                         <div class="col-sm-7 my-1">
-                            <label class="sr-only" for="inlineFormInputGroup">Возраст</label>
+                            <label class="sr-only" for="modalAge">Возраст</label>
                             <div class="input-group mb-2">
-                                <input th:value="*{age}" name="age" type="number" class="form-control" id="inlineFormInputGroup">
+                                <input  name="age" type="number" class="form-control" id="modalAge">
                             </div>
                         </div>
                         <div class="col-sm-7 my-1">
-                            <label class="sr-only" for="inlineFormInputGroup">Почта</label>
+                            <label class="sr-only" for="modalUsername">Почта</label>
                             <div class="input-group mb-2">
-                                <input th:value="*{username}" name="username" type="email" class="form-control" id="inlineFormInputGroup">
+                                <input  name="username" type="email" class="form-control" id="modalUsername">
                             </div>
                         </div>
 
                         <div class="col-sm-7 my-1">
-                            <label class="sr-only" for="inlineFormInputGroup">Пароль</label>
+                            <label class="sr-only" for="modalPassword">Пароль</label>
                             <div class="input-group mb-2">
-                                <input th:value="*{password}" name="password" type="password" class="form-control" id="inlineFormInputGroup">
+                                <input name="password" type="password" class="form-control" id="modalPassword">
                             </div>
                         </div>
 
 
                         <div class="col-sm-7 my-1">
                             <p style="margin-top: 5px"><strong>Роль</strong></p>
-                            <select class="form-select" name="roles" style="margin-top: 5px">
-                                <option th:each="role : ${rolesList}"
-                                        th:value="${role.getId()}"
-                                        th:text="${role.getName()}">Wireframe
-                                </option>
+                            <select id ="modalRole" class="form-select" name="roles" style="margin-top: 5px">
+                                <option value="2">USER</option>
+                                <option value="1">ADMIN</option>
                             </select>
 
                         </div>
@@ -279,12 +264,14 @@
 </div>
 
 
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script type="text/javascript"  src="js/admin.js"></script>
+<script type="text/javascript"  src="js/user.js"></script>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
 
 
 </body>
 </html>
+
